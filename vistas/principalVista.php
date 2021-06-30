@@ -16,6 +16,7 @@
 
     ?>
     <div align="center">
+        <a id="redirect" href="<?php echo $helper->url("iniciar", "shopping"); ?>"></a>
         <div class="row">
             <div class="col-8 m-auto">
                 <div class="col-12">
@@ -28,7 +29,7 @@
                         foreach ($result as $product) { ?>
                             <div class="col-4  my-3">
                                 <div class="card" style="width: 80%;">
-                                    <img class="card-img-top" src="img/audifonos.jpg" alt="Card image cap">
+                                    <img class="card-img-top" src="<?php echo $product->photo; ?>" alt="Card image cap">
                                     <div class="card-body">
                                         <h5 class="card-title"><?php echo $product->name; ?></h5>
                                     </div>
@@ -49,7 +50,8 @@
                                         </li>
                                     </ul>
                                     <div class="card-body">
-                                        <a href="#" onclick="addToCart('<?php echo $product->name; ?>',<?php echo $product->id; ?>, <?php echo $product->price; ?>,<?php echo $product->uid_owner; ?>)" class="card-link">Add To Cart</a>
+                                        <a href="#" onclick="addToCart('<?php echo $product->name; ?>',<?php echo $product->id; ?>, <?php echo $product->price; ?>,<?php echo $product->uid_owner; ?>,
+                                                                                                                                                                    <?php echo $_SESSION['idUsuario'] ?>)" class="card-link">Add To Cart</a>
                                     </div>
                                 </div>
                             </div>
@@ -61,15 +63,15 @@
             </div>
             <div class="col-4">
                 <form action="<?php echo $helper->url("iniciar", "sesion"); ?>" method="post" id="dataForm">
-                    <div class="card" style="width: 20rem;position: sticky;position: -webkit-sticky; top: 0;">
-                        <div class="card-body">
-                            <h5 class="card-title">Shopping Cart</h5>
-                        </div>
+                    <div class="card" style="width: 20rem;position: sticky;position: -webkit-sticky; top: 0;"">
+                        <div class=" card-body">
+                        <h5 class="card-title">Shopping Cart</h5>
+                    </div>
 
 
 
-                        <ul class="list-group list-group-flush group_list_cart">
-                            <!-- <li class="list-group-item" style="display:flex">
+                    <ul class="list-group list-group-flush group_list_cart">
+                        <!-- <li class="list-group-item" style="display:flex">
                             <p class="m-auto">Audifonos</p>
                             <p class="m-auto">2</p>
                         </li>
@@ -78,18 +80,18 @@
                             <p class="m-auto">2</p>
                         </li> -->
 
-                        </ul>
-                        <p> Total</p>
-                        <p class="total_price_cart"> 0</p>
+                    </ul>
+                    <p> Total</p>
+                    <p class="total_price_cart"> 0</p>
 
-                        <div class="card-body">
-                            <a onclick="payCart()" id="pay_cart" class="btn btn-primary">Buy it</a>
-                        </div>
-
+                    <div class="card-body">
+                        <a onclick="payCart()" id="pay_cart" class="btn btn-primary">Buy it</a>
                     </div>
-                </form>
+
             </div>
+            </form>
         </div>
+    </div>
 
 
     </div>

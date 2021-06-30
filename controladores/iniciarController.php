@@ -63,14 +63,22 @@ class iniciarController extends controladorBase
 	public function crearProducto()
 	{
 		$producto = new producto($this->adaptador);
+		$tem = $_FILES['photo_product']['tmp_name'];
+		$temname = $_FILES['photo_product']['name'];
+		$prefix = rand(1, 1000);
+		$newpath = "img/" . $prefix . "_" . $temname;
+		if (move_uploaded_file($tem, $newpath)) {
+			$image = $newpath;
+		}
 		$result = $producto->crear(
 			$_POST["name_product"],
 			$_POST["quantity_product"],
 			$_POST["lot_product"],
 			$_POST["expiration_product"],
-			$_POST["price_product"]
+			$_POST["price_product"],
+			$image
 		);
-
+		echo $result;
 		if ($result) {
 			$producto = new producto($this->adaptador);
 			$result = $producto->myProducts();
@@ -80,15 +88,38 @@ class iniciarController extends controladorBase
 			));
 		}
 	}
-	public function deleteTransaccion()
+	public function deleteTransSale()
 	{
 		$id = $_GET["id"];
+		$qty = $_GET["qty"];
 		$producto = new producto($this->adaptador);
-		$result = $producto->deleteTrans($id);
+		$result = $producto->updateInventary($id, $qty);
+		if ($result) {
 
-		$this->vistas("my-sales", array(
-			"result" => $result
-		));
+			$producto = new producto($this->adaptador);
+			$result = $producto->deleteTrans($id);
+
+			header('Refresh: 0; URL = index.php?controlador=iniciar&action=sales');
+		}
+	}
+
+	public function deleteTransShop()
+	{
+		$id = $_GET["id"];
+		$qty = $_GET["qty"];
+		$id_trans = $_GET["id_trans"];
+		$producto = new producto($this->adaptador);
+		$result = $producto->updateInventary($id, $qty);
+
+		if ($result) {
+
+			$producto = new producto($this->adaptador);
+			$result = $producto->deleteTrans($id_trans);
+			header('Refresh: 0; URL = index.php?controlador=iniciar&action=shopping');
+			// $this->vistas("my-shopping", array(
+			// 	"result" => $result
+			// ));
+		}
 	}
 
 
@@ -113,10 +144,10 @@ class iniciarController extends controladorBase
 				echo "sesion valida";
 				echo $_SESSION['rol'];
 
-				header('Refresh: 2; URL = index.php');
+				header('Refresh: 1; URL = index.php?controlador=usuarios&action=index');
 			} else {
 				echo "contraseña o usuario incorrecto";
-				header('Refresh: 2; URL = index.php');
+				header('Refresh: 1; URL = index.php');
 			}
 		}
 	}

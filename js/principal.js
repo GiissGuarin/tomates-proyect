@@ -25,7 +25,7 @@ function more(id) {
     $(".input_quantity_" + id).val(current_qty + 1)
 
 }
-function addToCart(name, id, price, uid_owner) {
+function addToCart(name, id, price, uid_owner, my_id) {
     let data = {
         id,
         uid_owner
@@ -40,12 +40,13 @@ function addToCart(name, id, price, uid_owner) {
         let busqueda = DataCart.filter(f => f.id == id)[0]
     } else {
         let quant = parseInt($(".input_quantity_" + id).val())
-        let html = ` <li class="list-group-item " id="${id}" style="display:flex">
-                        <input class="m-auto" type="text" name="qty" value="${quant}" >
-                        <input class="m-auto" type="text" name="id_p" value="${id}" >
-                        <input class="m-auto" type="text" name="uid_owner" value="${uid_owner}" >
+        let html = ` <li class="list-group-item " id="${id}" style="display:flex">                     
+                        
                         <p class="m-auto">${name}</p>
                         <p class="m-auto" >${quant}</p>
+                        <input style="display:none" class="m-auto" type="text" name="consult[]" value="VALUES(NULL, '${id}', '${quant}', '${my_id}', '${uid_owner}')" >
+                        <input style="display:none" class="m-auto" type="text" name="id_prod_quant[]" value="${id},${quant}" >
+                        
                     </li>`
         $(".group_list_cart").append(html)
         data.cant = quant
@@ -58,7 +59,7 @@ function addToCart(name, id, price, uid_owner) {
 }
 
 function payCart(url) {
-    let dataForm = $('#dataForm').serializeArray();
+    let dataForm = $('#dataForm').serialize();
     console.log(dataForm);
     let total = $(".total_price_cart").text()
 
@@ -72,20 +73,18 @@ function payCart(url) {
             dataForm: dataForm,
             total: total
         },
-        dataType: 'json',
-    }).done(async (res) => {
+        success: function (data) {
+            console.log("sucesssssss" + data)
+            window.location.href = "index.php?controlador=iniciar&action=shopping"
 
-        if (res.status == "success") {
-
-        } else {
-
+        }, error: error => {
+            $('#redirect').click();
 
         }
+    })
 
-    }).fail((err) => {
 
 
-    });
 
 
 }

@@ -16,7 +16,7 @@ if (isset($_SESSION['rol'])) {
 		$controllerObj = cargarControlador($_GET["controlador"]);
 		lanzarAccion($controllerObj);
 	} else {
-		$controllerObj = cargarControlador(CONTROLADOR_DEFECTO);
+		$controllerObj = cargarControlador(CONTROLADOR_LOGEDIN);
 		lanzarAccion($controllerObj);
 	}
 } else {

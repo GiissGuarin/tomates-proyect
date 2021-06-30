@@ -10,6 +10,11 @@ $(document).ready(($event) => {
         validateForm(validateData)
 
     });
+    $(".product_photo").change(($event) => {
+        current_file = this.files[0];
+        console.log(current_file);
+
+    })
 })
 function validateForm(data) {
     console.log(data)

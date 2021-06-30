@@ -32,7 +32,7 @@
             <tbody>
 
                 <?php
-                if (isset($result)) {
+                if ($result) {
                     foreach ($result as $product) { ?>
                         <tr>
                             <th scope="row"><?php echo $product->id; ?></th>
@@ -42,7 +42,7 @@
                             <td><?php echo $product->total; ?></td>
                             <td><?php echo $product->expiration; ?></td>
                             <td>
-                                <a class="btn btn-danger" onclick="Cancel(<?php echo $product->id; ?>)">Cancel</a>
+                                <a class="btn btn-danger" href="<?php echo $helper->url("iniciar", "deleteTransShop"); ?>&id=<?php echo $product->id_p; ?>&qty=<?php echo $product->quantity; ?>&id_trans=<?php echo $product->id; ?>">Cancel</a>
                             </td>
 
                         </tr>

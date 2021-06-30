@@ -17,7 +17,7 @@
         </div>
         <div class="row">
             <div class="col-10 m-auto">
-                <form action="<?php echo $helper->url("iniciar", "crearProducto"); ?>" method="POST">
+                <form action="<?php echo $helper->url("iniciar", "crearProducto"); ?>" method="POST" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-6 form-group">
                             <label for="exampleFormControlSelect1">Name of product</label>
@@ -40,6 +40,11 @@
                             <label>Price</label>
                             <input type="number" class="form-control product_price" placeholder="Price" name="price_product">
                         </div>
+                        <div class="col-6">
+                            <label>Cover photo</label>
+                            <input type="file" class="form-control product_photo" name="photo_product">
+                        </div>
+
                     </div>
                     <button class="btn btn-primary btn_update_product my-3" type="submit">Create product</button>
                 </form>

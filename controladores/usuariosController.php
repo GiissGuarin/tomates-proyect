@@ -48,18 +48,27 @@ class usuariosController extends controladorBase
     public function save()
     {
         $data = $_POST['dataForm'];
-        //parse_str($_POST['dataForm'], $data);
+        parse_str($_POST['dataForm'], $data);
         $producto = new producto($this->adaptador);
         $var = 0;
         $array_d = array();
-        foreach ($data as $key => $n) {
-            $array_p[$var] = $n;
-
-            $var = $var + 1;
+        foreach ($data['consult'] as $key) {
+            $result = $producto->pay($key);
         }
 
-        foreach ($array_p as $key => $n) {
-            echo $array_p . " " . $key . "  " . $n;
+        foreach ($data['id_prod_quant'] as $key) {
+            $param = explode(",", $key);
+            $result2 = $producto->updatepay($param[0], $param[1]);
+        }
+        if ($result && $result2) {
+            $producto = new producto($this->adaptador);
+            $result3 = $producto->myShopping();
+            return $result3;
+
+            // $this->vistas("my-shopping", array(
+            //     "result" => $result3,
+
+            // ));
         }
         // foreach ($array_p as $key) {
         //     echo $key . "    kkkkkk" . $array_p['id'] . "   " . $array_p['cant'];
@@ -78,26 +87,7 @@ class usuariosController extends controladorBase
             $save = $usuario->save();
         }
         echo 'Te has regristrado';
-        header('Refresh: 3; URL = index.php');
-    }
-
-    public function borrar()
-    {
-        if (isset($_GET["id"])) {
-
-
-            $usuario = new usuario($this->adaptador);
-            $usuario->deleteById($id);
-        }
-        $this->redirect();
-    }
-
-
-    public function hola()
-    {
-        $usuarios = new usuariosModelo($this->adaptador);
-        $usu = $usuarios->getUnUsuario();
-        var_dump($usu);
+        header('Refresh: 2; URL = index.php');
     }
 
     public function cerrarSesion()
@@ -108,6 +98,6 @@ class usuariosController extends controladorBase
         unset($_SESSION['marca']);
 
         echo 'Sesion cerrada';
-        header('Refresh: 3; URL = index.php');
+        header('Refresh: 2; URL = index.php?controlador=iniciar&action=index');
     }
 }

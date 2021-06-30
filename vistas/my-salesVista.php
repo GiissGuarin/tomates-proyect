@@ -12,6 +12,9 @@
 
 <body style="overflow-x: hidden;">
     <div align="center">
+        <div class="col-12">
+            <h4 class="subtit ">My Sales </h4>
+        </div>
         <table class="table">
             <thead class="thead-dark">
                 <tr>
@@ -28,7 +31,7 @@
             </thead>
             <tbody>
                 <?php
-                if (isset($result)) {
+                if ($result) {
                     foreach ($result as $product) { ?>
                         <tr>
                             <th scope="row"><?php echo $product->id; ?></th>
@@ -38,7 +41,7 @@
                             <td><?php echo $product->total; ?></td>
                             <td><?php echo $product->expiration; ?></td>
                             <td>
-                                <a class="btn btn-danger" href="<?php echo $helper->url("iniciar", "deleteTransaccion"); ?>&id=<?php echo $product->id; ?>">Cancel</a>
+                                <a class="btn btn-danger" href="<?php echo $helper->url("iniciar", "deleteTransSale"); ?>&id=<?php echo $product->id; ?>&qty=<?php echo $product->id; ?>">Cancel</a>
                             </td>
 
                         </tr>

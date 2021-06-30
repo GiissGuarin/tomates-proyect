@@ -10,9 +10,17 @@ class producto extends entidadBase
         $id_reparacion = "id_reparacion";
         parent::__construct($tabla, $adaptador);
     }
-    public function crear($name, $qty, $lot, $expir, $price)
+    public function crear($name, $qty, $lot, $expir, $price, $photo)
     {
         $owner = $_SESSION['idUsuario'];
+        // A few settings
+        //$img_file = $photo;
+
+        // Read image path, convert to base64 encoding
+        //$imgData = base64_encode(file_get_contents($img_file));
+
+        // Format the image SRC:  data:{mime};base64,{data};
+        //$src = 'data: ' . mime_content_type($img_file) . ';base64,' . $imgData;
 
         $query = "
        INSERT INTO `productos`(
@@ -22,6 +30,7 @@ class producto extends entidadBase
         `lot`,
         `expiration`,
         `price`,
+        `photo`,
         `uid_owner`
     )
     VALUES(
@@ -31,16 +40,17 @@ class producto extends entidadBase
         '$lot',
         '$expir',
         '$price',
+        '$photo',
         '$owner'
+        
     )
        ";
         $save = $this->get_BaseDatos()->query($query);
         return $save;
     }
 
-    public function pay($id_p, $qun, $price, $id_com, $id_ven)
+    public function pay($n)
     {
-
 
         $query = "
             INSERT INTO `transacciones`(
@@ -50,7 +60,17 @@ class producto extends entidadBase
             `uid_comprador`,
             `uid_vendedor`
             )
-            VALUES(NULL, '$id_p', '$qun', '$id_com', '$id_ven')
+            $n
+            ";
+        $save = $this->get_BaseDatos()->query($query);
+        return $save;
+    }
+
+    public function updatepay($id_p, $cant)
+    {
+
+        $query = "
+        UPDATE `productos` SET `quantity` = `quantity`-'$cant' WHERE `productos`.`id` = $id_p;
             ";
         $save = $this->get_BaseDatos()->query($query);
         return $save;
@@ -58,7 +78,7 @@ class producto extends entidadBase
 
     public function get_all()
     {
-        $query = "SELECT a.id, a.name, a.quantity, a.`lot`, a.`expiration`, a.`price`,a.`uid_owner` FROM `productos` AS a";
+        $query = "SELECT a.id, a.name, a.quantity, a.`lot`, a.`expiration`, a.`price`,a.`uid_owner`, a.`photo` FROM `productos` AS a";
         $save = $this->get_BaseDatos()->query($query);
         if (is_null($save)) {
             return false;
@@ -97,6 +117,7 @@ class producto extends entidadBase
         $query = "
         SELECT
             t.id,
+            a.id AS id_p,
             a.name,
             t.quantity,
             a.`expiration`,
@@ -111,7 +132,8 @@ class producto extends entidadBase
             t.uid_comprador =  $owner
         ";
         $save = $this->get_BaseDatos()->query($query);
-        if (is_null($save)) {
+        $save2 = $this->get_BaseDatos()->query($query);
+        if (is_null($row = $save2->fetch_object())) {
 
             return false;
         } else {
@@ -144,12 +166,13 @@ class producto extends entidadBase
             t.uid_vendedor =  $owner
         ";
         $save = $this->get_BaseDatos()->query($query);
-        if (is_null($save)) {
+        $save2 = $this->get_BaseDatos()->query($query);
+        if (is_null($row = $save2->fetch_object())) {
 
             return false;
         } else {
 
-            while ($you = $save->fetch_object()) {
+            while ($you =  $save->fetch_object()) {
                 $result[] = $you;
             }
 
@@ -163,8 +186,13 @@ class producto extends entidadBase
         $save = $this->get_BaseDatos()->query($query);
         return $save;
     }
-    public function updateITnventary($id, $quant)
+    public function updateInventary($id, $quant)
     {
-        # code...
+        $query = "
+        UPDATE `productos` SET `quantity` = `quantity`+'$quant' WHERE `productos`.`id` = $id;
+        ";
+
+        $save = $this->get_BaseDatos()->query($query);
+        return $save;
     }
 }
